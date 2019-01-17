@@ -74,6 +74,7 @@ module.exports = function(file, opt) {
             utils.removeFrom(workers, w);
             deactivate(w);
         });
+      
         workers.push(w);
         return w;
     }
@@ -148,9 +149,9 @@ module.exports = function(file, opt) {
     function workerDisconnect(w) { emit('disconnect', w); }
     function workerEmitExit(w) { emit('exit', w); }
 
-    self.run = function() {
+    self.run = function(silent = false) {
         if (!cluster.isMaster) return;
-        cluster.setupMaster({exec: file});
+        cluster.setupMaster({exec: file, silent});
         cluster.settings.args = opt.args;
         for (var i = 0; i < opt.workers; i++) fork(i);
 
